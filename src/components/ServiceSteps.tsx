@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
@@ -59,22 +60,22 @@ const ServiceSteps = () => {
         subject: `Nowe zgłoszenie: ${specialist?.title}`,
         to: "specpogotowie@relevatech.site",
         message: `
-          Nowe zgłoszenie od klienta:
-          
-          Wybrany specjalista: ${specialist?.title}
-          
-          Dane kontaktowe:
-          Imię i nazwisko: ${formData.name}
-          Email: ${formData.email}
-          Telefon: ${formData.phone}
-          Adres: ${formData.address}
-          
-          Opis problemu:
-          ${formData.description}
-          
-          Zgody:
-          - Regulamin: Zaakceptowano
-          - RODO: Zaakceptowano`
+Nowe zgłoszenie od klienta:
+
+Wybrany specjalista: ${specialist?.title}
+
+Dane kontaktowe:
+Imię i nazwisko: ${formData.name}
+Email: ${formData.email}
+Telefon: ${formData.phone}
+Adres: ${formData.address}
+
+Opis problemu:
+${formData.description}
+
+Zgody:
+- Regulamin: Zaakceptowano
+- RODO: Zaakceptowano`
       };
 
       const response = await fetch("https://api.web3forms.com/submit", {
