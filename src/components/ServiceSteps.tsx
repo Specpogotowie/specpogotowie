@@ -4,6 +4,7 @@ import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { Checkbox } from "./ui/checkbox";
 import { 
   Wrench, 
   Droplet, 
@@ -34,6 +35,8 @@ const ServiceSteps = () => {
     address: "",
     description: ""
   });
+  const [acceptedPolicies, setAcceptedPolicies] = useState(false);
+  const [acceptedRodo, setAcceptedRodo] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -141,8 +144,53 @@ const ServiceSteps = () => {
             </div>
           </Card>
         );
+      case 3:
+        return (
+          <Card className="p-6">
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                Potwierdzenie i zgody
+              </h3>
+              
+              <div className="flex items-start space-x-3">
+                <Checkbox 
+                  id="policies" 
+                  checked={acceptedPolicies}
+                  onCheckedChange={(checked) => setAcceptedPolicies(checked as boolean)}
+                />
+                <label htmlFor="policies" className="text-sm text-gray-600">
+                  Akceptuję regulamin serwisu SPECPogotowie oraz zapoznałem się z warunkami świadczenia usług.
+                </label>
+              </div>
+              
+              <div className="flex items-start space-x-3">
+                <Checkbox 
+                  id="rodo" 
+                  checked={acceptedRodo}
+                  onCheckedChange={(checked) => setAcceptedRodo(checked as boolean)}
+                />
+                <label htmlFor="rodo" className="text-sm text-gray-600">
+                  Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z polityką RODO w celu realizacji usługi.
+                </label>
+              </div>
+            </div>
+          </Card>
+        );
       default:
         return null;
+    }
+  };
+
+  const canProceedToNextStep = () => {
+    switch (step) {
+      case 1:
+        return selectedSpecialist !== "";
+      case 2:
+        return formData.name && formData.email && formData.phone;
+      case 3:
+        return acceptedPolicies && acceptedRodo;
+      default:
+        return false;
     }
   };
 
@@ -163,7 +211,7 @@ const ServiceSteps = () => {
               Wstecz
             </Button>
           )}
-          {step < 5 && (step === 1 ? selectedSpecialist : formData.name && formData.email && formData.phone) && (
+          {step < 5 && canProceedToNextStep() && (
             <Button
               onClick={() => setStep(step + 1)}
               className="flex items-center gap-2"
