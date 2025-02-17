@@ -54,14 +54,14 @@ const ServiceSteps = () => {
     setIsSubmitting(true);
     try {
       const specialist = specialists.find(s => s.id === selectedSpecialist);
-      const formData = new FormData();
+      const submitFormData = new FormData();
       
-      formData.append("access_key", "8460bc88-6fb6-4eb0-b911-0b312be01e0e");
-      formData.append("from_name", formData.name);
-      formData.append("from_email", formData.email);
-      formData.append("subject", `Nowe zgłoszenie: ${specialist?.title}`);
-      formData.append("to", "specpogotowie@relevatech.site");
-      formData.append("message", `Nowe zgłoszenie od klienta:
+      submitFormData.append("access_key", "8460bc88-6fb6-4eb0-b911-0b312be01e0e");
+      submitFormData.append("from_name", formData.name);
+      submitFormData.append("from_email", formData.email);
+      submitFormData.append("subject", `Nowe zgłoszenie: ${specialist?.title}`);
+      submitFormData.append("to", "specpogotowie@relevatech.site");
+      submitFormData.append("message", `Nowe zgłoszenie od klienta:
 
 Wybrany specjalista: ${specialist?.title}
 
@@ -80,7 +80,7 @@ Zgody:
 
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        body: formData
+        body: submitFormData
       });
 
       const responseData = await response.json();
