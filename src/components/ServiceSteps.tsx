@@ -57,10 +57,10 @@ const ServiceSteps = () => {
       const emailBody = {
         access_key: "c4967928-450a-46c7-8609-2e18afcf305b",
         from_name: formData.name,
+        from_email: formData.email,
         subject: `Nowe zgłoszenie: ${specialist?.title}`,
         to: "specpogotowie@relevatech.site",
-        message: `
-Nowe zgłoszenie od klienta:
+        message: `Nowe zgłoszenie od klienta:
 
 Wybrany specjalista: ${specialist?.title}
 
@@ -75,19 +75,25 @@ ${formData.description}
 
 Zgody:
 - Regulamin: Zaakceptowano
-- RODO: Zaakceptowano`
+- RODO: Zaakceptowano`,
+        botcheck: "",
+        name: formData.name,
+        email: formData.email
       };
+
+      console.log('Sending email with body:', emailBody);
 
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(emailBody)
       });
 
+      console.log('Response status:', response.status);
       const responseData = await response.json();
+      console.log('Response data:', responseData);
 
       if (responseData.success) {
         setStep(5);
