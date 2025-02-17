@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
@@ -55,7 +54,7 @@ const ServiceSteps = () => {
     try {
       const specialist = specialists.find(s => s.id === selectedSpecialist);
       const emailBody = {
-        access_key: "c4967928-450a-46c7-8609-2e18afcf305b", // Web3Forms public access key
+        access_key: "c4967928-450a-46c7-8609-2e18afcf305b",
         from_name: formData.name,
         subject: `Nowe zgłoszenie: ${specialist?.title}`,
         to: "specpogotowie@relevatech.site",
@@ -75,8 +74,7 @@ const ServiceSteps = () => {
           
           Zgody:
           - Regulamin: Zaakceptowano
-          - RODO: Zaakceptowano
-        `
+          - RODO: Zaakceptowano`
       };
 
       const response = await fetch("https://api.web3forms.com/submit", {
