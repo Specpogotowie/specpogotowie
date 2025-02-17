@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
@@ -54,13 +53,14 @@ const ServiceSteps = () => {
     setIsSubmitting(true);
     try {
       const specialist = specialists.find(s => s.id === selectedSpecialist);
-      const emailBody = {
-        access_key: "c4967928-450a-46c7-8609-2e18afcf305b",
-        from_name: formData.name,
-        from_email: formData.email,
-        subject: `Nowe zgłoszenie: ${specialist?.title}`,
-        to: "specpogotowie@relevatech.site",
-        message: `Nowe zgłoszenie od klienta:
+      const formData = new FormData();
+      
+      formData.append("access_key", "c4967928-450a-46c7-8609-2e18afcf305b");
+      formData.append("from_name", formData.name);
+      formData.append("from_email", formData.email);
+      formData.append("subject", `Nowe zgłoszenie: ${specialist?.title}`);
+      formData.append("to", "specpogotowie@relevatech.site");
+      formData.append("message", `Nowe zgłoszenie od klienta:
 
 Wybrany specjalista: ${specialist?.title}
 
@@ -75,23 +75,13 @@ ${formData.description}
 
 Zgody:
 - Regulamin: Zaakceptowano
-- RODO: Zaakceptowano`,
-        botcheck: "",
-        name: formData.name,
-        email: formData.email
-      };
-
-      console.log('Sending email with body:', emailBody);
+- RODO: Zaakceptowano`);
 
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(emailBody)
+        body: formData
       });
 
-      console.log('Response status:', response.status);
       const responseData = await response.json();
       console.log('Response data:', responseData);
 
