@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Checkbox } from "./ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Wrench, 
   Droplet, 
@@ -12,7 +13,8 @@ import {
   PaintBucket, 
   Home,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,
+  CheckCircle2
 } from "lucide-react";
 
 const specialists = [
@@ -25,6 +27,7 @@ const specialists = [
 ];
 
 const ServiceSteps = () => {
+  const { toast } = useToast();
   const [selectedSpecialist, setSelectedSpecialist] = useState("");
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -36,6 +39,7 @@ const ServiceSteps = () => {
   });
   const [acceptedPolicies, setAcceptedPolicies] = useState(false);
   const [acceptedRodo, setAcceptedRodo] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -43,6 +47,61 @@ const ServiceSteps = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleSubmitOrder = async () => {
+    setIsSubmitting(true);
+    try {
+      const specialist = specialists.find(s => s.id === selectedSpecialist);
+      const emailBody = {
+        to: "specpogotowie@relevatech.site",
+        subject: `Nowe zgłoszenie: ${specialist?.title}`,
+        message: `
+          Nowe zgłoszenie od klienta:
+          
+          Wybrany specjalista: ${specialist?.title}
+          
+          Dane kontaktowe:
+          Imię i nazwisko: ${formData.name}
+          Email: ${formData.email}
+          Telefon: ${formData.phone}
+          Adres: ${formData.address}
+          
+          Opis problemu:
+          ${formData.description}
+          
+          Zgody:
+          - Regulamin: Zaakceptowano
+          - RODO: Zaakceptowano
+        `
+      };
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          access_key: "YOUR-ACCESS-KEY", // Replace with your Web3Forms access key
+          ...emailBody
+        })
+      });
+
+      if (response.ok) {
+        setStep(5);
+      } else {
+        throw new Error("Wystąpił błąd podczas wysyłania zgłoszenia");
+      }
+    } catch (error) {
+      toast({
+        title: "Błąd",
+        description: "Nie udało się wysłać zgłoszenia. Prosimy spróbować ponownie.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderStep = () => {
@@ -224,11 +283,48 @@ const ServiceSteps = () => {
 
               <div className="mt-6 flex justify-end">
                 <Button 
-                  onClick={() => setStep(step + 1)}
+                  onClick={handleSubmitOrder}
+                  disabled={isSubmitting}
                   className="flex items-center gap-2"
                 >
-                  Potwierdź i wyślij zgłoszenie
+                  {isSubmitting ? "Wysyłanie..." : "Potwierdź i wyślij zgłoszenie"}
                   <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </Card>
+        );
+      case 5:
+        return (
+          <Card className="p-6">
+            <div className="text-center space-y-4">
+              <div className="flex justify-center">
+                <CheckCircle2 className="w-16 h-16 text-green-500" />
+              </div>
+              <h3 className="text-2xl font-semibold text-gray-800">
+                Zgłoszenie przyjęte!
+              </h3>
+              <p className="text-gray-600 max-w-md mx-auto">
+                Dziękujemy za zgłoszenie. Nasz specjalista skontaktuje się z Tobą w najbliższym czasie w celu ustalenia szczegółów.
+              </p>
+              <div className="pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setStep(1);
+                    setSelectedSpecialist("");
+                    setFormData({
+                      name: "",
+                      email: "",
+                      phone: "",
+                      address: "",
+                      description: ""
+                    });
+                    setAcceptedPolicies(false);
+                    setAcceptedRodo(false);
+                  }}
+                >
+                  Powrót do strony głównej
                 </Button>
               </div>
             </div>
