@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
@@ -176,6 +175,65 @@ const ServiceSteps = () => {
             </div>
           </Card>
         );
+      case 4:
+        return (
+          <Card className="p-6">
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                Podsumowanie zgłoszenia
+              </h3>
+              
+              <div className="space-y-4">
+                <div className="flex items-center p-4 bg-gray-50 rounded-lg">
+                  <div className="mr-4">
+                    {specialists.find(s => s.id === selectedSpecialist)?.icon}
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-800">Wybrany specjalista</h4>
+                    <p className="text-gray-600">
+                      {specialists.find(s => s.id === selectedSpecialist)?.title}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-medium text-gray-800 mb-2">Dane kontaktowe</h4>
+                    <div className="space-y-2 text-gray-600">
+                      <p><span className="font-medium">Imię i nazwisko:</span> {formData.name}</p>
+                      <p><span className="font-medium">Email:</span> {formData.email}</p>
+                      <p><span className="font-medium">Telefon:</span> {formData.phone}</p>
+                      <p><span className="font-medium">Adres:</span> {formData.address}</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium text-gray-800 mb-2">Opis problemu</h4>
+                    <p className="text-gray-600 whitespace-pre-wrap">{formData.description}</p>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium text-gray-800 mb-2">Zgody</h4>
+                  <ul className="list-disc list-inside space-y-2 text-gray-600">
+                    <li>Zaakceptowano regulamin serwisu</li>
+                    <li>Wyrażono zgodę na przetwarzanie danych osobowych (RODO)</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-end">
+                <Button 
+                  onClick={() => setStep(step + 1)}
+                  className="flex items-center gap-2"
+                >
+                  Potwierdź i wyślij zgłoszenie
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </Card>
+        );
       default:
         return null;
     }
@@ -189,6 +247,8 @@ const ServiceSteps = () => {
         return formData.name && formData.email && formData.phone;
       case 3:
         return acceptedPolicies && acceptedRodo;
+      case 4:
+        return true;
       default:
         return false;
     }
