@@ -6,7 +6,7 @@ import {
   Wrench, 
   Droplet, 
   Flame, 
-  PipelineIcon, // Changed from Pipeline to PipelineIcon
+  Pipe, 
   PaintBucket, 
   Home,
   ChevronRight,
@@ -17,7 +17,7 @@ const specialists = [
   { id: "electrician", title: "Elektryk", icon: <Wrench className="w-6 h-6" /> },
   { id: "plumber", title: "Hydraulik", icon: <Droplet className="w-6 h-6" /> },
   { id: "heating", title: "Specjalista od ogrzewania", icon: <Flame className="w-6 h-6" /> },
-  { id: "sewage", title: "Kanalizacja i odpływy", icon: <PipelineIcon className="w-6 h-6" /> },
+  { id: "sewage", title: "Kanalizacja i odpływy", icon: <Pipe className="w-6 h-6" /> },
   { id: "decorator", title: "Dekorator wnętrz", icon: <PaintBucket className="w-6 h-6" /> },
   { id: "roofing", title: "Specjalista od dachów", icon: <Home className="w-6 h-6" /> },
 ];
