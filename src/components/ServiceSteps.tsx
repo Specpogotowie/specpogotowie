@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
@@ -54,8 +55,10 @@ const ServiceSteps = () => {
     try {
       const specialist = specialists.find(s => s.id === selectedSpecialist);
       const emailBody = {
-        to: "specpogotowie@relevatech.site",
+        access_key: "c4967928-450a-46c7-8609-2e18afcf305b", // Web3Forms public access key
+        from_name: formData.name,
         subject: `Nowe zgłoszenie: ${specialist?.title}`,
+        to: "specpogotowie@relevatech.site",
         message: `
           Nowe zgłoszenie od klienta:
           
@@ -82,18 +85,18 @@ const ServiceSteps = () => {
           "Content-Type": "application/json",
           Accept: "application/json"
         },
-        body: JSON.stringify({
-          access_key: "YOUR-ACCESS-KEY", // Replace with your Web3Forms access key
-          ...emailBody
-        })
+        body: JSON.stringify(emailBody)
       });
 
-      if (response.ok) {
+      const responseData = await response.json();
+
+      if (responseData.success) {
         setStep(5);
       } else {
-        throw new Error("Wystąpił błąd podczas wysyłania zgłoszenia");
+        throw new Error(responseData.message || "Wystąpił błąd podczas wysyłania zgłoszenia");
       }
     } catch (error) {
+      console.error("Email submission error:", error);
       toast({
         title: "Błąd",
         description: "Nie udało się wysłać zgłoszenia. Prosimy spróbować ponownie.",
