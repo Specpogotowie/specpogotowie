@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
@@ -55,7 +56,7 @@ const ServiceSteps = () => {
       const specialist = specialists.find(s => s.id === selectedSpecialist);
       const formData = new FormData();
       
-      formData.append("access_key", "c4967928-450a-46c7-8609-2e18afcf305b");
+      formData.append("access_key", "8460bc88-6fb6-4eb0-b911-0b312be01e0e");
       formData.append("from_name", formData.name);
       formData.append("from_email", formData.email);
       formData.append("subject", `Nowe zgłoszenie: ${specialist?.title}`);
